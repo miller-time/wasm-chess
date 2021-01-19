@@ -1,11 +1,292 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Hello wasm-pack!</title>
-  </head>
-  <body>
-    <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
-    <script src="./bootstrap.js"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>WASM Chess</title>
+  <style>
+    .board {
+      text-align: center;
+      border-spacing: 0pt;
+      font-family: 'Arial Unicode MS';
+      border-collapse: collapse;
+      border-color: black;
+      border-style: solid;
+      border-width: 0pt 0pt 0pt 0pt;
+    }
+
+    .square {
+      width: 24pt;
+      height: 24pt;
+    }
+
+    .border-square {
+      border-collapse: collapse;
+      border-color: black;
+      border-style: solid;
+    }
+
+    .border-square-topleft {
+      border-width: 1pt 0pt 0pt 1pt;
+    }
+
+    .border-square-top {
+      border-width: 1pt 0pt 0pt 0pt;
+    }
+
+    .border-square-topright {
+      border-width: 1pt 1pt 0pt 0pt;
+    }
+
+    .border-square-left {
+      border-width: 0pt 0pt 0pt 1pt;
+    }
+
+    .border-square-right {
+      border-width: 0pt 1pt 0pt 0pt;
+    }
+
+    .border-square-bottomleft {
+      border-width: 0pt 0pt 1pt 1pt;
+    }
+
+    .border-square-bottom {
+      border-width: 0pt 0pt 1pt 0pt;
+    }
+
+    .border-square-bottomright {
+      border-width: 0pt 1pt 1pt 0pt;
+    }
+
+    .black-square {
+      background-color: #C0C0C0;
+    }
+
+    .legend {
+      width: 12pt;
+    }
+
+    .piece {
+      font-size: 150%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <table class="board">
+
+    <tbody>
+      <tr>
+        <td class="legend">8
+        </td>
+        <td class="square border-square border-square-topleft">
+          <span class="piece">♜</span>
+        </td>
+        <td class="square border-square border-square-top black-square">
+          <span class="piece">♞</span>
+        </td>
+        <td class="square border-square border-square-top">
+          <span class="piece">♝</span>
+        </td>
+        <td class="square border-square border-square-top black-square">
+          <span class="piece">♛</span>
+        </td>
+        <td class="square border-square border-square-top">
+          <span class="piece">♚</span>
+        </td>
+        <td class="square border-square border-square-top black-square">
+          <span class="piece">♝</span>
+        </td>
+        <td class="square border-square border-square-top">
+          <span class="piece">♞</span>
+        </td>
+        <td class="square border-square border-square-topright black-square">
+          <span class="piece">♜</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="legend">7
+        </td>
+        <td class="square border-square border-square-left black-square">
+          <span class="piece">♟</span>
+        </td>
+        <td class="square"><span class="piece">♟</span>
+        </td>
+        <td class="square black-square"><span class="piece">♟</span>
+        </td>
+        <td class="square"><span class="piece">♟</span>
+        </td>
+        <td class="square black-square"><span class="piece">♟</span>
+        </td>
+        <td class="square"><span class="piece">♟</span>
+        </td>
+        <td class="square black-square"><span class="piece">♟</span>
+        </td>
+        <td class="square border-square border-square-right">
+          <span class="piece">♟</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="legend">6
+        </td>
+        <td class="square border-square border-square-left">
+          <span class="piece"><br></span>
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square border-square border-square-right black-square">
+        </td>
+      </tr>
+      <tr>
+        <td class="legend">5
+        </td>
+        <td class="square border-square border-square-left black-square"
+          style="width:24pt; height:24pt; border-collapse:collapse; border-color: black; border-style: solid; border-width: 0pt 0pt 0pt 1pt">
+          <span class="piece"><br></span>
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square border-square border-square-right">
+        </td>
+      </tr>
+      <tr>
+        <td class="legend">4
+        </td>
+        <td class="square border-square border-square-left">
+          <span class="piece"><br></span>
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square border-square border-square-right black-square">
+        </td>
+      </tr>
+      <tr>
+        <td class="legend">3
+        </td>
+        <td class="square border-square border-square-left black-square">
+          <span class="piece"><br></span>
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square">
+        </td>
+        <td class="square black-square">
+        </td>
+        <td class="square border-square border-square-right">
+        </td>
+      </tr>
+      <tr>
+        <td class="legend">2
+        </td>
+        <td class="square border-square border-square-left">
+          <span class="piece">♙</span>
+        </td>
+        <td class="square black-square"><span class="piece">♙</span>
+        </td>
+        <td class="square"><span class="piece">♙</span>
+        </td>
+        <td class="square black-square"><span class="piece">♙</span>
+        </td>
+        <td class="square"><span class="piece">♙</span>
+        </td>
+        <td class="square black-square"><span class="piece">♙</span>
+        </td>
+        <td class="square"><span class="piece">♙</span>
+        </td>
+        <td class="square border-square border-square-right black-square">
+          <span class="piece">♙</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="legend">1
+        </td>
+        <td class="square border-square border-square-bottomleft black-square">
+          <span class="piece">♖</span>
+        </td>
+        <td class="square border-square border-square-bottom">
+          <span class="piece">♘</span>
+        </td>
+        <td class="square border-square border-square-bottom black-square">
+          <span class="piece">♗</span>
+        </td>
+        <td class="square border-square border-square-bottom">
+          <span class="piece">♕</span>
+        </td>
+        <td class="square border-square border-square-bottom black-square">
+          <span class="piece">♔</span>
+        </td>
+        <td class="square border-square border-square-bottom">
+          <span class="piece">♗</span>
+        </td>
+        <td class="square border-square border-square-bottom black-square">
+          <span class="piece">♘</span>
+        </td>
+        <td class="square border-square border-square-bottomright">
+          <span class="piece">♖</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>a
+        </td>
+        <td>b
+        </td>
+        <td>c
+        </td>
+        <td>d
+        </td>
+        <td>e
+        </td>
+        <td>f
+        </td>
+        <td>g
+        </td>
+        <td>h
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+  <script src="./bootstrap.js"></script>
+</body>
+
 </html>
