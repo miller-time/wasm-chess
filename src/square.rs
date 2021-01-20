@@ -20,6 +20,10 @@ impl Square {
     }
 
     pub fn render(&self) -> String {
-        format!("{}{}: _", self.file.render(), self.rank)
+        let p = match &self.piece {
+            Some(piece) => piece.render(),
+            None => "_".to_string()
+        };
+        format!("{}{}: {}", self.file.render(), self.rank, p)
     }
 }
