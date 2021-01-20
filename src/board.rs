@@ -25,30 +25,21 @@ impl Board {
         squares.push(Square::new(Some(Piece::new(PieceType::Knight, Color::White)), 1, 7));
         squares.push(Square::new(Some(Piece::new(PieceType::Rook, Color::White)), 1, 8));
 
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 1));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 2));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 3));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 4));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 5));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 6));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 7));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::White)), 2, 8));
+        for file in 1..=8 {
+            let pawn = Piece::new(PieceType::Pawn, Color::White);
+            squares.push(Square::new(Some(pawn), 2, file));
+        }
 
         for rank in 3..=6 {
-            for file in 1..=6 {
-                let square = Square::new(None, rank, file);
-                squares.push(square);
+            for file in 1..=8 {
+                squares.push(Square::new(None, rank, file));
             }
         }
 
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 1));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 2));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 3));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 4));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 5));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 6));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 7));
-        squares.push(Square::new(Some(Piece::new(PieceType::Pawn, Color::Black)), 7, 8));
+        for file in 1..=8 {
+            let pawn = Piece::new(PieceType::Pawn, Color::Black);
+            squares.push(Square::new(Some(pawn), 7, file));
+        }
 
         squares.push(Square::new(Some(Piece::new(PieceType::Rook, Color::Black)), 8, 1));
         squares.push(Square::new(Some(Piece::new(PieceType::Knight, Color::Black)), 8, 2));
@@ -58,6 +49,8 @@ impl Board {
         squares.push(Square::new(Some(Piece::new(PieceType::Bishop, Color::Black)), 8, 6));
         squares.push(Square::new(Some(Piece::new(PieceType::Knight, Color::Black)), 8, 7));
         squares.push(Square::new(Some(Piece::new(PieceType::Rook, Color::Black)), 8, 8));
+
+        assert_eq!(squares.len(), 64);
 
         Board { squares }
     }
