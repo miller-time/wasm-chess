@@ -2,6 +2,12 @@ mod utils;
 
 use wasm_bindgen::prelude::*;
 
+pub mod board;
+pub mod color;
+pub mod file;
+pub mod piece;
+pub mod square;
+
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
@@ -9,7 +15,7 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
-extern {
+extern "C" {
     fn alert(s: &str);
 }
 
@@ -17,3 +23,5 @@ extern {
 pub fn greet() {
     alert("Hello, wasm-chess!");
 }
+
+pub use board::Board;
