@@ -1,3 +1,4 @@
-import * as wasm from "wasm-chess";
+import { Board } from "wasm-chess";
 
-// wasm.greet();
+const board = Board.new();
+console.log(board.render());
