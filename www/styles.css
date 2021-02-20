@@ -58,8 +58,9 @@
 
 .legend {
   width: 12pt;
+  font-size: 14px;
 }
 
-.piece {
-  font-size: 150%;
+.piece, .empty {
+  font-size: 21px;
 }
