@@ -26,7 +26,9 @@ document.addEventListener('click', (event) => {
     piece = null;
   }
 
-  console.log('clicked on:', square);
+  if (debug) {
+    console.log('clicked on:', square);
+  }
   if (piece) {
     if (debug) {
       console.log('piece:', piece.innerHTML);
@@ -34,28 +36,40 @@ document.addEventListener('click', (event) => {
   }
   if (heldPiece || heldPieceLocation) {
     if (debug) {
-      console.log('holding:', heldPiece, 'located:', heldPieceLocation);
+      console.log('holding:', heldPiece.innerHTML, 'located:', heldPieceLocation);
     }
   }
 
   if (piece) {
     // this square has a piece on it
     if (heldPieceLocation) {
-      // we were already holding a piece, cancel that
-      console.log('bumped into', piece.innerHTML, 'at', square);
-      console.log('returning', heldPiece, 'to', heldPieceLocation);
-      heldPiece = null;
-      heldPieceLocation = null;
+      // we were holding a piece
+      if (heldPieceLocation === square) {
+        // put the held piece back down
+        console.log('returning', heldPiece.innerHTML, 'to', heldPieceLocation);
+        heldPiece.classList = 'piece';
+        heldPiece = null;
+        heldPieceLocation = null;
+      } else {
+        // capture this piece
+        capturePiece(heldPieceLocation, square);
+        // reset
+        heldPiece.classList = 'piece';
+        heldPiece = null;
+        heldPieceLocation = null;
+      }
     } else {
       // pick up this piece to move it
-      heldPiece = piece.innerHTML;
+      piece.classList = 'piece held';
+      heldPiece = piece;
       heldPieceLocation = square;
-      console.log('picking up', piece.innerHTML, 'from', heldPieceLocation);
+      console.log('picking up', heldPiece.innerHTML, 'from', heldPieceLocation);
     }
   } else if (heldPieceLocation) {
     // we were holding a piece, move it to this square
     movePiece(heldPieceLocation, square);
     // reset
+    heldPiece.classList = 'piece';
     heldPiece = null;
     heldPieceLocation = null;
   }
@@ -79,7 +93,7 @@ function movePiece(from, to) {
       console.log('fromPiece', fromPiece);
     }
     if (fromPiece) {
-      console.log('moving piece', heldPiece, 'from', from, 'to', to);
+      console.log('moving piece', fromPiece.innerHTML, 'from', from, 'to', to);
       toSquare.append(fromPiece);
     }
     // this is a spacer element that unifies the height of empty squares
@@ -87,6 +101,42 @@ function movePiece(from, to) {
     const toEmpty = toSquare.querySelector('.empty');
     if (toEmpty) {
       fromSquare.append(toEmpty);
+    }
+  }
+}
+
+function capturePiece(captor, captive) {
+  const captorSquare = document.getElementById(captor);
+  if (debug) {
+    console.log('captorSquare', captorSquare);
+  }
+  const captiveSquare = document.getElementById(captive);
+  if (debug) {
+    console.log('captiveSquare', captiveSquare);
+  }
+  if (captorSquare && captiveSquare) {
+    const captorPiece = captorSquare.querySelector('.piece');
+    if (debug) {
+      console.log('captorPiece', captorPiece);
+    }
+    const captivePiece = captiveSquare.querySelector('.piece');
+    if (debug) {
+      console.log('captivePiece', captivePiece);
+    }
+    if (captorPiece && captivePiece) {
+      console.log(
+        'moving', captorPiece.innerHTML, 'from', captor, 'to', captive,
+        'and capturing', captivePiece.innerHTML
+      );
+      captivePiece.remove();
+      captiveSquare.append(captorPiece);
+
+      // this is a spacer element that unifies the height of empty squares
+      // to match the height of squares with pieces
+      const empty = document.createElement('span');
+      empty.classList = 'empty';
+      empty.innerHTML = '<br />';
+      captorSquare.append(empty);
     }
   }
 }
